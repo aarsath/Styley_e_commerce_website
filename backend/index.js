@@ -5,10 +5,15 @@ require("./config/firebase.config")
 
 const app = express();
 
-//Add/Update your frontend url to avoid CORS error
-var corsOptions = {
-  origin: ["http://localhost:5173", "http://192.168.1.18:5173", "http://192.168.1.4:5173/"]
-};
+// Set FRONTEND_URL in the API service to the deployed frontend origin.
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://192.168.1.18:5173",
+  "http://192.168.1.4:5173",
+  process.env.FRONTEND_URL?.replace(/\/$/, "")
+].filter(Boolean);
+
+const corsOptions = { origin: allowedOrigins };
 
 app.use(cors(corsOptions));
 app.use("/uploads", express.static("uploads"));
