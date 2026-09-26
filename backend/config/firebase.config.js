@@ -5,7 +5,7 @@ require('dotenv').config();
 
 const serviceAccountPath = process.env.FIREBASE_SERVICE_ACCOUNT_PATH
     ? path.resolve(process.env.FIREBASE_SERVICE_ACCOUNT_PATH)
-    : path.resolve(__dirname, '../crud/servicekey.json');
+    : path.resolve(__dirname, '../servicekey.json');
 
 if (!fs.existsSync(serviceAccountPath)) {
     throw new Error(
