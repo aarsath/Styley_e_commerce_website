@@ -1,0 +1,35 @@
+:root {
+	--style-primary: #1a1a1a;
+	--style-accent: #d4a373;
+	--style-bg: #ffffff;
+	--style-surface: #fafafa;
+	--style-border: #e5e5e5;
+	--style-text: #333333;
+	--style-muted: #767676;
+}
+
+.style-app {
+	min-height: 100vh;
+	background: var(--style-bg);
+	color: var(--style-text);
+	font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+.style-heading,
+.style-logo {
+	font-family: Poppins, ui-sans-serif, system-ui, sans-serif;
+}
+
+.style-grid {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 24px 16px;
+}
+
+@media (max-width: 900px) {
+	.style-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (max-width: 640px) {
+	.style-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 12px; }
+}
