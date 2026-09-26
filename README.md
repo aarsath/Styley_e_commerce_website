@@ -75,7 +75,12 @@ npm run lint      # Run ESLint
 
 ## Configuration
 
-Configure the backend database, Firebase, upload, and payment settings using local environment/configuration files required by the project. Configure the frontend API base URL with the Vite environment variable used by the Axios service.
+For the backend, copy `backend/.env.example` to `backend/.env` and set your local values. Download a Firebase Admin service-account JSON file from Firebase Console and either:
+
+- place it at `backend/crud/servicekey.json` (the default), or
+- set `FIREBASE_SERVICE_ACCOUNT_PATH` in `backend/.env` to its absolute path.
+
+The service-account file must be kept private and is ignored by Git. The backend cannot start Firebase-dependent API services until you provide this key. Set `KEY_ID` and `KEY_SECRET` in `backend/.env` to enable Razorpay checkout. Configure the frontend API base URL with the Vite environment variable used by the Axios service.
 
 Never publish production credentials to GitHub. The repository ignores dependency folders and the backend Firebase service-account key.
 

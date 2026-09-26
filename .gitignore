@@ -7,3 +7,5 @@ EMC-Kart-Api/cred/serviceKey.json
 backend/node_modules/
 frontend/node_modules/
 backend/crud/servicekey.json
+backend/.env
+!backend/.env.example
