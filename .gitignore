@@ -2,10 +2,9 @@ EMC-Kart-Ui/node_modules
 EMC-Kart-Api/node_modules
 EMC-Kart-Ui/package-lock.json
 EMC-Kart-Api/package-lock.json
-EMC-Kart-Api/cred/serviceKey.json
 
 backend/node_modules/
 frontend/node_modules/
-backend/crud/servicekey.json
 backend/.env
 !backend/.env.example
+backend/crud/servicekey.json
