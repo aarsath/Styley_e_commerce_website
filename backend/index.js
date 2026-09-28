@@ -10,6 +10,7 @@ const allowedOrigins = [
   "http://localhost:5173",
   "http://192.168.1.18:5173",
   "http://192.168.1.4:5173",
+  "https://styley-e-commerce-website-1.onrender.com",
   process.env.FRONTEND_URL?.replace(/\/$/, "")
 ].filter(Boolean);
 
