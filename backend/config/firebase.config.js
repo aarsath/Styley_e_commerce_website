@@ -5,11 +5,14 @@ require('dotenv').config();
 
 const serviceAccountPath = process.env.FIREBASE_SERVICE_ACCOUNT_PATH
     ? path.resolve(process.env.FIREBASE_SERVICE_ACCOUNT_PATH)
-    : path.resolve(__dirname, '../etc/secrets/servicekey.json');
+    : [
+        path.resolve(__dirname, '../etc/secrets/servicekey.json'),
+        path.resolve(__dirname, '../crud/servicekey.json')
+    ].find(candidate => fs.existsSync(candidate));
 
-if (!fs.existsSync(serviceAccountPath)) {
+if (!serviceAccountPath) {
     throw new Error(
-        `Firebase service-account key not found at ${serviceAccountPath}. ` +
+        'Firebase service-account key not found. ' +
         'Set FIREBASE_SERVICE_ACCOUNT_PATH in backend/.env or place the downloaded key at backend/crud/servicekey.json.'
     );
 }
