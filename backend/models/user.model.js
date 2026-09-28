@@ -5,7 +5,11 @@ module.exports = mongoose => {
             email: String,
             address: String,
             phone_number: String,
-            uid: String
+            uid: String,
+            isAdmin: {
+                type: Boolean,
+                default: false
+            }
         },
         {
             timestamps: true

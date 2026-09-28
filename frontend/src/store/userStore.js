@@ -6,22 +6,24 @@ import {
     setDataInLocalStorage,
     removeDataFromLocalStorage } from '../service/localStorageService';
 
-export const loginUser = createAsyncThunk(('user/login'), async(userData) => {
-    const firebaseResponse = await firebaseLogin(userData)
-    const userResponse = await axios.post(`${import.meta.env.VITE_LOCAL_URL}api/user/login`, firebaseResponse.user)
-    const finalRes = await userResponse.data
-    return finalRes
+export const loginUser = createAsyncThunk(('user/login'), async(userData, { rejectWithValue }) => {
+    try {
+        const firebaseResponse = await firebaseLogin(userData)
+        const userResponse = await axios.post(`${import.meta.env.VITE_LOCAL_URL}api/user/login`, firebaseResponse.user)
+        return userResponse.data
+    } catch (error) {
+        const responseMessage = error?.response?.data?.message || error?.message || 'Login failed'
+        return rejectWithValue({ message: responseMessage })
+    }
 });
 
 export const registerUser = createAsyncThunk(('user/register'), async(userData, { rejectWithValue }) => {
     try{
         const userResponse = await axios.post(`${import.meta.env.VITE_LOCAL_URL}api/user/register`, userData)
-        return userResponse
+        return userResponse.data
     } catch (error) {
-        if (error.response.status >= 400) {
-            return rejectWithValue({ message: error.response.data.message })
-          }
-        return rejectWithValue({message: 'Some Other message'})
+        const responseMessage = error?.response?.data?.message || error?.message || 'Registration failed'
+        return rejectWithValue({ message: responseMessage })
     }
 });
 
@@ -84,7 +86,7 @@ const userSlice = createSlice({
     .addCase(loginUser.rejected, (state, action) => {
         state.loading = false,
         state.userData =null,
-        state.error = action.error
+        state.error = action.payload?.message || action.error?.message || 'Login failed'
     })
     .addCase(registerUser.pending, (state) => {
         state.loading = true

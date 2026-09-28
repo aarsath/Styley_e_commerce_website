@@ -9,6 +9,10 @@ exports.create = async (req, res) => {
     res.status(400).send({ message: "Content can not be empty!" });
     return;
   }
+
+  const email = String(req.body.email).toLowerCase();
+  const isAdmin = email === 'admin@gmail.com' || String(req.body.isAdmin) === 'true';
+
   try {
     await firebase.auth().createUser({
       email: req.body.email,
@@ -23,7 +27,8 @@ exports.create = async (req, res) => {
         email: userCredential.email,
         phone_number: req.body.phone_number,
         address: req.body.address,
-        uid: userCredential.uid
+        uid: userCredential.uid,
+        isAdmin
       });
       user
       .save(user)
@@ -47,17 +52,43 @@ exports.create = async (req, res) => {
 
 exports.validateUser = async(req, res) => {
   try {
-    const user = await User.findOne({uid: req.body.uid})
-    if (user) {
-      res.status(200).send(user)
-    } else {
-      res.status(404).send("User Not Found")
+    const { uid, email, displayName, phoneNumber } = req.body || {};
+
+    if (!uid || !email) {
+      return res.status(400).send({ message: "UID and email are required." });
     }
+
+    const normalizedEmail = String(email).toLowerCase();
+    const isAdminUser = normalizedEmail === 'admin@gmail.com';
+
+    let user = await User.findOne({
+      $or: [
+        { uid: uid },
+        { email: normalizedEmail }
+      ]
+    });
+
+    if (!user) {
+      user = new User({
+        name: displayName || normalizedEmail.split('@')[0],
+        email: normalizedEmail,
+        phone_number: phoneNumber || "",
+        address: "",
+        uid,
+        isAdmin: isAdminUser
+      });
+
+      await user.save();
+    } else if (isAdminUser && !user.isAdmin) {
+      user.isAdmin = true;
+      await user.save();
+    }
+
+    return res.status(200).send(user);
   } catch (err) {
-    res.status(500).send({
-      message:
-          err.message || "Some error occurred while fetching the User."
-  });
+    return res.status(500).send({
+      message: err.message || "Some error occurred while fetching the User."
+    });
   }
 }
 
